@@ -1,8 +1,14 @@
-import numpy as np
 import cv2
-def exponential(image,value):
-    image = cv2.imread(image)
-    PEAK=1-value
-    return np.random.exponential(image / 255.0 * PEAK) / PEAK * 255
+import cupy as cp
+import numpy as np
 
-# cv2.imwrite('exponential.jpeg',exponential("images\image-3.jpg"))
+
+def exponential(imagelocation, value):
+    image = cv2.imread(imagelocation)
+    scale = value * 10
+
+    img_gpu = cp.asarray(image, dtype=cp.float32)
+    noise = cp.random.exponential(scale=scale, size=image.shape)
+    noisy = cp.clip(img_gpu + noise, 0, 255)
+
+    return cp.asnumpy(noisy).astype(np.uint8)

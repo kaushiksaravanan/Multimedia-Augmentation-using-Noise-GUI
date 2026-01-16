@@ -1,0 +1,17 @@
+{
+  "cpu": {
+    "gaussian": 0.8170664700097404,
+    "speckle": 0.3727444300078787,
+    "uniform": 0.4520451299962588
+  },
+  "gpu": {
+    "gaussian": null,
+    "speckle": null,
+    "uniform": null
+  },
+  "speedup": {
+    "gaussian": null,
+    "speckle": null,
+    "uniform": null
+  }
+}

@@ -1,19 +1,23 @@
 import cv2
+import cupy as cp
 import numpy as np
-import random
+
 
 def pepper(img_path, value):
-    salt_prob=pepper_prob=value
     img = cv2.imread(img_path)
     height, width, _ = img.shape
-    num_salt = int(height * width * salt_prob)
-    num_pepper = int(height * width * pepper_prob)
+    img_gpu = cp.asarray(img)
 
-    for _ in range(num_salt):
-        y, x = random.randint(0, height - 1), random.randint(0, width - 1)
-        img[y, x] = [255, 255, 255]  
+    num_salt = int(height * width * value)
+    if num_salt > 0:
+        y = cp.random.randint(0, height, size=num_salt)
+        x = cp.random.randint(0, width, size=num_salt)
+        img_gpu[y, x] = cp.array([255, 255, 255])
 
-    for _ in range(num_pepper):
-        y, x = random.randint(0, height - 1), random.randint(0, width - 1)
-        img[y, x] = [0, 0, 0]  
-    return img
+    num_pepper = int(height * width * value)
+    if num_pepper > 0:
+        y = cp.random.randint(0, height, size=num_pepper)
+        x = cp.random.randint(0, width, size=num_pepper)
+        img_gpu[y, x] = cp.array([0, 0, 0])
+
+    return cp.asnumpy(img_gpu)

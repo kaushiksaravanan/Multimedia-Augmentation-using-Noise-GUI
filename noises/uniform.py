@@ -1,9 +1,13 @@
-import numpy as np
 import cv2
+import cupy as cp
+import numpy as np
 
-def uniform(imagelocation,value):
+
+def uniform(imagelocation, value):
     img = cv2.imread(imagelocation, 0)
-    intensity = value
-    noise = np.random.uniform(-intensity, intensity, img.shape)
-    noisy_img = img + noise.astype(np.uint8)
-    return noisy_img
+    img_gpu = cp.asarray(img, dtype=cp.float32)
+
+    noise = cp.random.uniform(-value, value, img_gpu.shape)
+    noisy = cp.clip(img_gpu + noise, 0, 255)
+
+    return cp.asnumpy(noisy).astype(np.uint8)

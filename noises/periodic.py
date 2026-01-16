@@ -1,13 +1,18 @@
 import cv2
+import cupy as cp
 import numpy as np
 
-def periodic(imagelocation,value):
+
+def periodic(imagelocation, value):
     img = cv2.imread(imagelocation, 0)
-    noise_level = value
-    noise_freq = 0.05
     h, w = img.shape
-    y, x = np.ogrid[0:h, 0:w]
-    noise = np.sin(2*np.pi*noise_freq*x + np.pi*noise_freq*y)
-    noise = np.clip(noise, -1, 1) * noise_level
-    noisy_img = np.clip(img.astype(np.float32) + noise*255, 0, 255).astype(np.uint8)
-    return noisy_img
+    noise_freq = 0.05
+
+    img_gpu = cp.asarray(img, dtype=cp.float32)
+    y, x = cp.ogrid[0:h, 0:w]
+
+    noise = cp.sin(2 * cp.pi * noise_freq * x + cp.pi * noise_freq * y)
+    noise = cp.clip(noise, -1, 1) * value
+
+    noisy = cp.clip(img_gpu + noise * 255, 0, 255)
+    return cp.asnumpy(noisy).astype(np.uint8)

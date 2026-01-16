@@ -1,10 +1,13 @@
 import cv2
+import cupy as cp
 import numpy as np
 
-def speckle(imagelocation,value):
+
+def speckle(imagelocation, value):
     img = cv2.imread(imagelocation, 0)
-    noise_level = value
-    noise = np.random.normal(loc=1, scale=noise_level, size=img.shape)
-    noisy_img = img * noise
-    noisy_img = np.clip(noisy_img, 0, 255).astype(np.uint8)
-    return noisy_img
+
+    img_gpu = cp.asarray(img, dtype=cp.float32)
+    noise = cp.random.normal(loc=1, scale=value, size=img_gpu.shape)
+    noisy = cp.clip(img_gpu * noise, 0, 255)
+
+    return cp.asnumpy(noisy).astype(np.uint8)

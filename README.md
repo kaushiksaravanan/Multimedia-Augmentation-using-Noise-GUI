@@ -2,7 +2,7 @@
 Demo link - https://www.youtube.com/watch?v=6JQuTVdgvY4
 ### Requirements specified by SAMSUNG R&D India
 ## Inspiration
-Came up with the idea when playing with filters in snapchat as filter can be added and swapped out without needing to capcute the entire image again with a new filter.
+Came up with the idea when playing with filters in snapchat as filter can be added and swapped out without needing to capture the entire image again with a new filter.
 ## What it does
 The idea is that when training models with small data set there is a sure chance of the model overfitting to the data. Project aims to prevent it by adding noises that are realistic. That occur in nature like blurs when taking manual photography. 
 ## How we built it
